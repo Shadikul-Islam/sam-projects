@@ -1,0 +1,20 @@
+%LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+%SYS-5-CONFIG_I: Configured from console by admin
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+%LINK-3-UPDOWN: Interface GigabitEthernet0/2, changed state to down
+%SYS-5-RESTART: System restarted due to power cycle
+%DHCP-6-ADDRESS_ASSIGN: DHCP address 192.168.1.100 assigned to client
+%LINK-3-UPDOWN: Interface GigabitEthernet0/3, changed state to administratively down
+%SECURITY-6-PACKET_ACCEPT: Packet accepted from source 192.168.2.10
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+%SYS-5-CONFIG_I: Configured from console by another admin
+%LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+%SYS-5-CONFIG_I: Configured from console by admin
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+%LINK-3-UPDOWN: Interface GigabitEthernet0/2, changed state to down
+%SYS-5-RESTART: System restarted due to power cycle
+%DHCP-6-ADDRESS_ASSIGN: DHCP address 192.168.1.100 assigned to client
+%LINK-3-UPDOWN: Interface GigabitEthernet0/3, changed state to administratively down
+%SECURITY-6-PACKET_ACCEPT: Packet accepted from source 192.168.2.10
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+%SYS-5-CONFIG_I: Configured from console by another admin

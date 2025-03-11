@@ -1,0 +1,40 @@
+auths:
+  snmp_v1:
+    version: 1
+    community: cisco_router
+  snmp_v2:
+    version: 2
+    community: cisco_router
+
+modules:
+  system:
+    walk:
+      - "hrSWRunStatus"  # Resources Used
+
+  interfaces:
+    walk:
+      - "ifOperStatus"     # Interface Status
+      - "ifHCInOctets"  # Incoming Bandwidth 
+      - "ifHCOutOctets" # Outgoing Bandwidth 
+      - "ifInErrors"    # Inbound Errors 
+      - "ifOutErrors"    # Outbound Errors 
+      - "ifInDiscards"    # Inbound Discards 
+      - "ifOutDiscards"    # Outbound Discards 
+
+  mpls:
+    walk:
+      - "mplsInSegmentOperStatus"  # MPLS LSP Status 
+
+
+  ospf:
+    walk:
+      - "ospfNbrState"  # OSPF Neighbor State 
+      - "ospfNbrEvents"  # OSPF Neighbor State Changes 
+      - "ospfAreaLsaCountTable"     # OSPF LSA Count
+
+  bgp:
+    walk:
+      - "bgpPeerState"  # BGP Neighbor State 
+      - "bgpPeerInUpdates"  # BGP Accepted Prefix Count 
+      - "bgpPeerOutUpdates"  # BGP Advertised Prefix Count 
+      - "bgpPeerFsmEstablishedTransitions"  # BGP Flaps 

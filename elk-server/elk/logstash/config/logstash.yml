@@ -1,0 +1,13 @@
+node.name: "logstash"
+http.host: "0.0.0.0"
+
+path.settings: /usr/share/logstash/config
+
+xpack.management.elasticsearch.username: "elastic"
+xpack.management.elasticsearch.password: "${ELASTIC_PASSWORD}"
+
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.hosts: ["https://elasticsearch:9200"]
+xpack.monitoring.elasticsearch.username: "elastic"
+xpack.monitoring.elasticsearch.password: "${ELASTIC_PASSWORD}"
+xpack.monitoring.elasticsearch.ssl.certificate_authority: "/usr/share/logstash/config/certs/ca/ca.crt"

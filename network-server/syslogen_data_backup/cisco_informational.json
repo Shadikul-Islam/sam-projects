@@ -1,0 +1,66 @@
+[
+  {
+    "hostname": "Router01",
+    "app_name": "IOS",
+    "msg": "%LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:00:00"
+  },
+  {
+    "hostname": "Router02",
+    "app_name": "IOS",
+    "msg": "%SYS-5-CONFIG_I: Configured from console by admin",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:01:00"
+  },
+  {
+    "hostname": "Router03",
+    "app_name": "IOS",
+    "msg": "%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:02:00"
+  },
+  {
+    "hostname": "Router01",
+    "app_name": "IOS",
+    "msg": "%LINK-3-UPDOWN: Interface GigabitEthernet0/2, changed state to down",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:03:00"
+  },
+  {
+    "hostname": "Router02",
+    "app_name": "IOS",
+    "msg": "%SYS-5-RESTART: System restarted due to power cycle",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:04:00"
+  },
+  {
+    "hostname": "Router03",
+    "app_name": "IOS",
+    "msg": "%DHCP-6-ADDRESS_ASSIGN: DHCP address 192.168.1.100 assigned to client",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:05:00"
+  },
+  {
+    "hostname": "Router01",
+    "app_name": "IOS",
+    "msg": "%LINK-3-UPDOWN: Interface GigabitEthernet0/3, changed state to administratively down",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:06:00"
+  },
+  {
+    "hostname": "Router02",
+    "app_name": "IOS",
+    "msg": "%SECURITY-6-PACKET_ACCEPT: Packet accepted from source 192.168.2.10",
+    "severity": 6,
+    "facility": 23,
+    "timestamp": "2024-01-01T10:07:00"
+  }
+]

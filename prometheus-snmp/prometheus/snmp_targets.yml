@@ -1,0 +1,7 @@
+# SNMP Targets
+# /monitoring/prometheus/snmp_targets.yml
+
+- targets: ["172.31.9.215:1161"]
+  labels:
+    job: "snmp"
+

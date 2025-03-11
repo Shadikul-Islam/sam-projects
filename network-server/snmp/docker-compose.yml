@@ -1,0 +1,27 @@
+
+services:
+  snmp:
+    build: .
+    image: prom/snmp-exporter #quay.io/prometheus/snmp-exporter
+    container_name: snmp-exporter
+    volumes:
+      - snmp_data:/etc/snmp_exporter
+    ports:
+      - 9116:9116
+    restart: always
+    command: --config.file=/etc/snmp_exporter/snmp.yml
+    networks:
+      - monitor-net
+
+networks:
+  monitor-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+    name: monitor-net
+    external: true
+
+volumes:
+  snmp_data:
+    external: true

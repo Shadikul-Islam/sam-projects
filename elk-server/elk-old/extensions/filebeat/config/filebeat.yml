@@ -1,0 +1,30 @@
+name: filebeat
+
+filebeat.inputs:
+- type: filestream
+  id: my-filestream
+  enabled: true
+  paths:
+    - /var/log/syslog
+  parsers:
+    - ndjson:
+      overwrite_keys: true
+      add_error_key: true
+      expand_keys: true
+
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+processors:
+  - add_cloud_metadata: ~
+
+output.logstash:
+  hosts: ["logstash:5044"]
+  username: filebeat_internal
+  password: ${FILEBEAT_INTERNAL_PASSWORD}
+
+http:
+  enabled: true
+  host: 0.0.0.0

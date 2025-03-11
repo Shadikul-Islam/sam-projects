@@ -1,0 +1,63 @@
+groups:
+- name: network_alerts
+  rules:
+
+  # ✅ Interface Utilization Alert Rule (Corrected Expression)
+  - alert: InterfaceUtilizationHigh
+    expr: (ifHCInOctets + ifHCOutOctets) / (ifSpeed > 0) > 0.9
+    for: 5m
+    labels:
+      severity: pending_ai  # Placeholder severity for AI-based processing
+    annotations:
+      summary: "High Interface Utilization"
+      description: "Interface utilization exceeds 90% on {{ $labels.instance }} for more than 5 minutes."
+
+  # ✅ Packet Errors/Discards Alert Rule (Corrected Expression)
+  - alert: PacketErrorsHigh
+    expr: (ifInErrors + ifOutErrors) / (ifHCInOctets + ifHCOutOctets > 0) > 0.02
+    for: 5m
+    labels:
+      severity: pending_ai  # AI will determine severity
+    annotations:
+      summary: "High Packet Errors"
+      description: "Packet errors exceed 2% on {{ $labels.instance }} for more than 5 minutes."
+
+  # ✅ CPU Utilization Alert Rule (No Change Needed)
+  - alert: CPUUtilizationHigh
+    expr: hrProcessorLoad > 90
+    for: 10m
+    labels:
+      severity: pending_ai
+    annotations:
+      summary: "High CPU Utilization"
+      description: "CPU utilization exceeds 90% on {{ $labels.instance }} for more than 10 minutes."
+
+  # ✅ Interface Flapping Alert Rule (No Change Needed)
+  - alert: InterfaceFlapping
+    expr: changes(ifOperStatus[2m]) > 5
+    for: 2m
+    labels:
+      severity: pending_ai
+    annotations:
+      summary: "Interface Flapping Detected"
+      description: "Interface is flapping (more than 5 state changes within 2 minutes) on {{ $labels.instance }}."
+
+  # ✅ Dropped Packets Alert Rule (Corrected Expression)
+  - alert: DroppedPacketsHigh
+    expr: (ifInDiscards / (ifHCInOctets > 0)) > 0.01 or (ifOutDiscards / (ifHCOutOctets > 0)) > 0.01
+    for: 5m
+    labels:
+      severity: pending_ai
+    annotations:
+      summary: "High Dropped Packets"
+      description: "Dropped packets exceed 1% of total traffic on {{ $labels.instance }}."
+
+  # ✅ SNMP Device Down Alert Rule (No Change Needed)
+  - alert: SNMPDeviceDown
+    expr: up{job="snmp"} == 0
+    for: 10m
+    labels:
+      severity: pending_ai
+    annotations:
+      summary: "SNMP Device {{ $labels.instance }} is Down"
+      description: "No SNMP response for more than 10 minutes."

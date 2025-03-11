@@ -1,0 +1,46 @@
+global:
+  scrape_interval: 60s  # General scrape interval
+  evaluation_interval: 30s  # Evaluate recording rules every 30 seconds
+
+# Reference alerting rules
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+# AlertManager Configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - "alertmanager:9093"  # Matches AlertManager's service name in Docker
+
+scrape_configs:
+  # Node Exporter - System Metrics
+  - job_name: 'node-exporter'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # Prometheus Self Monitoring
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  # SNMP Exporter - Network Monitoring
+  - job_name: 'snmp'
+    scrape_interval: 300s  # SNMP metrics collected every 5 minutes
+    metrics_path: /snmp
+    params:
+      module: [system,interfaces,mpls,ospf,bgp]
+      auth: [snmp_v2]
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/snmp_targets.yml
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: snmp-exporter:9116

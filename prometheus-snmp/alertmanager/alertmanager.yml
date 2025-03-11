@@ -1,0 +1,56 @@
+# Maximus AlertManager Configuration
+# - Routes SNMP alerts for AI processing, automation, and logging.
+# - Ensures AI-reviewed alerts are handled separately.
+# - Allows automation to trigger based on AI-enhanced insights.
+
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+  receiver: "prometheus-agent"  # Default receiver
+
+  routes:
+    # Route AI-pending alerts to Prometheus Agent for analysis
+    - match:
+        severity: pending_ai
+      receiver: "prometheus-agent"
+
+    # Route AI-reviewed alerts to Elasticsearch for historical logging
+    - match:
+        severity: ai_processed
+      receiver: "ai-reviewed-handler"
+
+    # Route high-priority SNMP alerts to the Orchestrator Agent for decision-making
+    - match:
+        severity: critical
+      receiver: "orchestrator-agent"
+
+    # Route actionable SNMP alerts to Ansible Agent for automation
+    - match:
+        severity: auto_remediate
+      receiver: "ansible-agent"
+
+receivers:
+  - name: "prometheus-agent"
+    webhook_configs:
+      - url: "http://172.31.18.226:8001/webhook"
+        send_resolved: true
+
+  - name: "ai-reviewed-handler"
+    webhook_configs:
+      - url: "http://172.31.20.40:9200/alerts"
+        send_resolved: true
+
+  - name: "orchestrator-agent"
+    webhook_configs:
+      - url: "http://172.31.18.226:8000/webhook"
+        send_resolved: true
+
+  - name: "ansible-agent"
+    webhook_configs:
+      - url: "http://172.31.20.40:5000/webhook"
+        send_resolved: true

@@ -1,0 +1,83 @@
+version: '3.9'
+
+services:
+  elasticsearch:
+    image: elasticsearch:${ELASTIC_VERSION}
+    container_name: elasticsearch
+    build:
+      context: elasticsearch/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - elasticsearch:/usr/share/elasticsearch/data
+      - certificates:/usr/share/elasticsearch/config/certs:ro
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms8g -Xmx8g
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      discovery.type: single-node
+    networks:
+      elk:
+        ipv4_address: 172.20.0.2
+    restart: unless-stopped
+
+  logstash:
+    image: logstash:${ELASTIC_VERSION}
+    container_name: logstash
+    build:
+      context: logstash/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - certificates:/usr/share/logstash/config/certs:ro
+    environment:
+      LS_JAVA_OPTS: -Xms3g -Xmx3g
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+    networks:
+      elk:
+        ipv4_address: 172.20.0.3
+    ports:
+      - "514:514/udp"
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  kibana:
+    image: kibana:${ELASTIC_VERSION}
+    container_name: kibana
+    build:
+      context: kibana/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+      - certificates:/usr/share/kibana/config/certs:ro
+    ports:
+      - 5601:5601
+    networks:
+      elk:
+        ipv4_address: 172.20.0.4
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+networks:
+  elk:
+    name: elk-net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  elasticsearch:
+    name: elasticsearch
+  certificates:
+    name: certificates
+
