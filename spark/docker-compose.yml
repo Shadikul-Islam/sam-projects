@@ -1,0 +1,77 @@
+services:
+  spark-master:
+    image: docker.io/bitnami/spark:3.5
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+      - TZ=Asia/Dhaka
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./config/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - spark-events:/tmp/spark-events
+    restart: always
+    networks:
+      - spark-net
+
+  spark-worker-faiss:
+    build:
+      context: ./faiss/
+      dockerfile: Dockerfile.spark-faiss
+    container_name: spark-worker-faiss
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=3G
+      - SPARK_WORKER_CORES=1
+      - SPARK_USER=spark
+      - HOME=/opt/bitnami/spark
+      - TZ=Asia/Dhaka
+    volumes:
+      - ./config/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - ./scripts/etl_pipeline.py:/opt/bitnami/spark/scripts/etl_pipeline.py
+      - ./jars/elasticsearch-spark-30_2.12-9.0.1.jar:/opt/bitnami/spark/jars/elasticsearch-spark-30_2.12-9.0.1.jar
+      - spark-events:/tmp/spark-events
+      - spark-output-data:/opt/spark_output
+    restart: always
+    networks:
+      - spark-net
+    depends_on:
+      - spark-master
+
+  spark-history-server:
+    build:
+      context: ./history-server/
+      dockerfile: Dockerfile.history-server
+    container_name: spark-history-server
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./config/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - spark-events:/tmp/spark-events
+    environment:
+      - SPARK_HISTORY_OPTS=-Dspark.history.fs.logDirectory=file:///tmp/spark-events -Dspark.history.ui.port=18080
+    restart: always
+    networks:
+      - spark-net
+    depends_on:
+      - spark-master
+
+networks:
+  spark-net:
+    name: spark-net
+
+volumes:
+  spark-events:
+   driver: local
+   name: spark-events
+
+  spark-output-data:
+   driver: local
+   name: spark-output-data
+

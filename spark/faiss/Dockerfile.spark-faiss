@@ -1,0 +1,28 @@
+# Start from Bitnami Spark
+FROM bitnami/spark:3.5
+
+# Become root to install packages
+USER root
+
+ENV HOME=/opt/bitnami/spark
+
+# Create and set permissions
+RUN mkdir -p /tmp/spark-events /opt/spark_output && \
+    chmod -R 777 /tmp/spark-events /opt/spark_output
+
+# Install pip and faiss
+RUN apt-get update && \
+    apt-get install -y python3-pip tzdata && \
+    pip3 install faiss-cpu numpy pandas
+
+RUN pip install --no-cache-dir pandas numpy scikit-learn
+
+# Spark event logging environment variables
+ENV SPARK_HISTORY_OPTS="-Dspark.history.fs.logDirectory=file:///tmp/spark-events -Dspark.history.fs.cleaner.enabled=true -Dspark.history.fs.cleaner.interval=1d -Dspark.history.fs.cleaner.maxAge=7d"
+ENV SPARK_EVENTLOG_ENABLED=true
+ENV SPARK_EVENTLOG_DIR=file:///tmp/spark-events
+
+# Switch back to non-root user for Bitnami Spark
+RUN useradd -m -u 1001 sparkuser
+USER sparkuser
+
