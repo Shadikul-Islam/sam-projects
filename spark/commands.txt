@@ -1,0 +1,15 @@
+Run Job Manually: sudo docker exec -it spark-worker-faiss spark-submit /opt/bitnami/spark/scripts/etl_pipeline.py
+
+Run Job Manually with log file: /usr/bin/docker exec spark-worker-faiss spark-submit /opt/bitnami/spark/scripts/etl_pipeline.py >> /var/log/etl_cron/etl_cron.log 2>&1
+
+Run Job with Cron Job: sudo crontab -e
+0 * * * * /usr/bin/docker exec spark-worker-faiss spark-submit /opt/bitnami/spark/scripts/etl_pipeline.py >> /var/log/etl_cron/etl_cron.log 2>&1
+
+Check logs in Host Machine: cat /var/log/etl_cron/etl_cron.log
+
+Check Vector data and Json data from container: sudo docker exec -it spark-worker-faiss ls /opt/spark_output/
+
+Check Vector data and Json data from host machine: sudo ls /var/lib/docker/volumes/spark-output-data/_data/
+
+Go Inside Spark Faiss Container: sudo docker exec -it spark-worker-faiss bash 
+
