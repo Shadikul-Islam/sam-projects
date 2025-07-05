@@ -35,6 +35,7 @@ services:
     volumes:
       - ./config/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
       - ./scripts/etl_pipeline.py:/opt/bitnami/spark/scripts/etl_pipeline.py
+      - ./scripts/anomaly_detector.py:/opt/bitnami/spark/scripts/anomaly_detector.py
       - ./jars/elasticsearch-spark-30_2.12-9.0.1.jar:/opt/bitnami/spark/jars/elasticsearch-spark-30_2.12-9.0.1.jar
       - spark-events:/tmp/spark-events
       - spark-output-data:/opt/spark_output

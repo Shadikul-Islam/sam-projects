@@ -130,12 +130,60 @@ else:
     os.makedirs(output_path, exist_ok=True)
 
     # Save FAISS vectors
+    # vector_output_path = os.path.join(output_path, "faiss_ready_vectors.pkl")
+    # with open(vector_output_path, "wb") as f:
+    #     pickle.dump({
+    #         "vectors": vectors,
+    #         "metadata": pandas_df[["peer_ip", "router_id", "event_type"]].to_dict(orient="records")
+    #     }, f)
+
+
+    # Save FAISS vectors + extended metadata
     vector_output_path = os.path.join(output_path, "faiss_ready_vectors.pkl")
+
+    # Join with original DataFrame to get full log context
+    enriched_df = pandas_df.copy()
+    enriched_df["pca_x"] = vectors[:, 0]
+    enriched_df["pca_y"] = vectors[:, 1]
+
+    json_logs = df_final.toPandas()
+
+    # Safety check in case number of rows differ
+    metadata = []
+    if len(enriched_df) == len(json_logs):
+        for i in range(len(enriched_df)):
+            metadata.append({
+                "peer_ip": enriched_df.loc[i, "peer_ip"],
+                "router_id": enriched_df.loc[i, "router_id"],
+                "event_type": enriched_df.loc[i, "event_type"],
+                "timestamp": str(json_logs.loc[i, "@timestamp"]),
+                "message": json_logs.loc[i, "message"],
+                "host": json_logs.loc[i, "host"],
+                "pca_x": enriched_df.loc[i, "pca_x"],
+                "pca_y": enriched_df.loc[i, "pca_y"]
+            })
+    else:
+        print("❗ Warning: Data mismatch, falling back to partial info.")
+        for i in range(len(enriched_df)):
+            metadata.append({
+                "peer_ip": enriched_df.loc[i, "peer_ip"],
+                "router_id": enriched_df.loc[i, "router_id"],
+                "event_type": enriched_df.loc[i, "event_type"],
+                "timestamp": "unknown",
+                "message": "unknown",
+                "host": "unknown",
+                "pca_x": enriched_df.loc[i, "pca_x"],
+                "pca_y": enriched_df.loc[i, "pca_y"]
+            })
+
+
+    # Save vectors and metadata
     with open(vector_output_path, "wb") as f:
         pickle.dump({
             "vectors": vectors,
-            "metadata": pandas_df[["peer_ip", "router_id", "event_type"]].to_dict(orient="records")
+            "metadata": metadata
         }, f)
+
 
     print("========================================================================================")
     print("✅  FAISS vector saved to:", vector_output_path)
@@ -155,4 +203,3 @@ print(f"✅  Hourly ETL pipeline completed successfully. Timeframe: {formatted_w
 print("=======================================================================================")
 
 spark.stop()
-
