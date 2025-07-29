@@ -1,5 +1,5 @@
 # Start from Bitnami Spark
-FROM bitnami/spark:3.5
+FROM bitnami/spark:3.5.6
 
 # Become root to install packages
 USER root
@@ -12,8 +12,8 @@ RUN mkdir -p /tmp/spark-events /opt/spark_output && \
 
 # Install pip and faiss
 RUN apt-get update && \
-    apt-get install -y python3-pip tzdata && \
-    pip3 install faiss-cpu numpy pandas
+    apt-get install -y python3-pip tzdata vim && \
+    pip3 install faiss-cpu numpy pandas requests
 
 RUN pip install --no-cache-dir pandas numpy scikit-learn
 
@@ -25,4 +25,3 @@ ENV SPARK_EVENTLOG_DIR=file:///tmp/spark-events
 # Switch back to non-root user for Bitnami Spark
 RUN useradd -m -u 1001 sparkuser
 USER sparkuser
-

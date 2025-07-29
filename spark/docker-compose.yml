@@ -1,6 +1,6 @@
 services:
   spark-master:
-    image: docker.io/bitnami/spark:3.5
+    image: docker.io/bitnami/spark:3.5.6
     container_name: spark-master
     environment:
       - SPARK_MODE=master
@@ -12,6 +12,8 @@ services:
       - TZ=Asia/Dhaka
     ports:
       - '8080:8080'
+      - '7077:7077'
+      - '6066:6066'
     volumes:
       - ./config/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
       - spark-events:/tmp/spark-events
@@ -27,8 +29,8 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=3G
-      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=8G
+      - SPARK_WORKER_CORES=4
       - SPARK_USER=spark
       - HOME=/opt/bitnami/spark
       - TZ=Asia/Dhaka

@@ -43,7 +43,7 @@ def main():
 
     print(f"⏳ Waiting for vector file: {vector_file}")
 
-    # Wait for up to 10 minutes (adjustable)
+    # Wait for up to 5 minutes (adjustable)
     timeout = 600  # seconds
     interval = 10  # check every 10 seconds
     elapsed = 0
@@ -123,3 +123,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
