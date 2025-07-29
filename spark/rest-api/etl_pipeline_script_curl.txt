@@ -1,0 +1,36 @@
+# Job submissions curl
+curl -X POST http://172.31.83.208:6066/v1/submissions/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "CreateSubmissionRequest",
+    "appResource": "file:/opt/bitnami/spark/scripts/etl_pipeline.py",
+    "clientSparkVersion": "3.5.6",
+    "mainClass": "org.apache.spark.deploy.PythonRunner",
+    "appArgs": ["/opt/bitnami/spark/scripts/etl_pipeline.py", ""],
+    "environmentVariables": {
+      "PYSPARK_PYTHON": "/opt/bitnami/python/bin/python3",
+      "SPARK_ENV_LOADED": "1"
+    },
+    "sparkProperties": {
+      "spark.driver.supervise": "false",
+      "spark.app.name": "Rest_ETL_Pipeline",
+      "spark.submit.deployMode": "cluster",
+      "spark.master": "spark://spark-master:7077",
+      "spark.eventLog.enabled": "true",
+      "spark.driver.memory": "512m",
+      "spark.executor.memory": "512m",
+      "spark.executor.cores": "1",
+      "spark.jars": "file:/opt/bitnami/spark/jars/elasticsearch-spark-30_2.12-9.0.1.jar",
+      "spark.driver.extraJavaOptions": "--add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED",
+      "spark.executor.extraJavaOptions": "--add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED"
+    }
+  }'
+
+# Job status curl 
+curl http://172.31.83.208:6066/v1/submissions/status/driver-id
+
+# Job details curl 
+curl http://172.31.83.208:18080/api/v1/applications
+
+# Job kill curl 
+curl -X POST http://172.31.83.208:6066/v1/submissions/kill/driver-id

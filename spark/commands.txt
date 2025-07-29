@@ -18,3 +18,12 @@ Check Vector data and Json data from host machine: sudo ls /var/lib/docker/volum
 
 Go Inside Spark Faiss Container: sudo docker exec -it spark-worker-faiss bash 
 
+Docker Volumes: cd /var/lib/docker/volumes/spark-output-data/_data/
+
+Rest API Debuging: 
+docker exec -it spark-worker-faiss bash 
+cd /opt/bitnami/spark/work/
+cd driver-id
+cat stderr
+cat steout
+
