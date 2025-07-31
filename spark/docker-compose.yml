@@ -41,6 +41,7 @@ services:
       - ./jars/elasticsearch-spark-30_2.12-9.0.1.jar:/opt/bitnami/spark/jars/elasticsearch-spark-30_2.12-9.0.1.jar
       - spark-events:/tmp/spark-events
       - spark-output-data:/opt/spark_output
+      - spark-rest-api-data:/opt/bitnami/spark/work/
     restart: always
     networks:
       - spark-net
@@ -77,4 +78,8 @@ volumes:
   spark-output-data:
    driver: local
    name: spark-output-data
+
+  spark-rest-api-data:
+   driver: local
+   name: spark-rest-api-data
 
