@@ -1,2 +1,0 @@
-{"_index":"maximus-events","_id":"abc123","_source":{"@timestamp":"2025-01-01T00:00:00Z","trace_id":"t-1","message":"hello 1"}}
-{"_index":"maximus-events","_id":"abc124","_source":{"@timestamp":"2025-01-01T00:00:01Z","trace_id":"t-2","message":"hello 2"}}
