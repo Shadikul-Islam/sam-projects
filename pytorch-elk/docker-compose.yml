@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  ingest-service:
+    build: .
+    container_name: pytorch-ingest
+    ports:
+      - "8088:8088"
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app:ro
+      - /srv/pytorch/data/raw:/srv/pytorch/data/raw
+    restart: unless-stopped
