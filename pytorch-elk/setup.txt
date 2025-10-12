@@ -1,0 +1,10 @@
+
+sudo mkdir -p /srv/pytorch/data/raw
+sudo chown $(whoami) /srv/pytorch/data/raw
+
+mv .env.example .env
+
+docker-compose build
+docker-compose up -d
+
+
