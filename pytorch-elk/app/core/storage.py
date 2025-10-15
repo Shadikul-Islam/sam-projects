@@ -5,17 +5,18 @@ import uuid
 BASE_DIR = "/srv/pytorch/data/raw"
 
 def save_batch(lines: list[str]) -> str:
-    """Save NDJSON batch to correct directory structure: /srv/pytorch/data/raw/DD-MM-YYYY/HH/"""
+    """Save NDJSON batch to correct directory structure: /srv/pytorch/data/raw/YYYY/MM/DD/HH/"""
     if not lines:
         return None
 
     now = datetime.utcnow()
-    # New folder format: day-month-year
-    date_folder = now.strftime("%d-%m-%Y")
+    year = now.strftime("%Y")
+    month = now.strftime("%m")
+    day = now.strftime("%d")
     hour = now.strftime("%H")
 
-    # Directory path
-    dir_path = os.path.join(BASE_DIR, date_folder, hour)
+    # Directory path example: /srv/pytorch/data/raw/2025/09/14/20/
+    dir_path = os.path.join(BASE_DIR, year, month, day, hour)
     os.makedirs(dir_path, exist_ok=True)
 
     # File name example: batch-20251012T091903Z-5nqe7l.ndjson

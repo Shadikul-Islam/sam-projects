@@ -13,8 +13,9 @@ class WatermarkUpdate(BaseModel):
     stream: str
     last_ingested_iso: str
 
+# GET /control/watermark?stream=maximus-events
 @router.get("/control/watermark")
-async def get_watermark_endpoint(stream: str = Query(...)):
+async def get_watermark_endpoint(stream: str = Query("maximus-events")):
     value = get_watermark(stream)
     if value is None:
         raise HTTPException(status_code=404, detail="Watermark not set")
